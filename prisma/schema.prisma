@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+}
+
+enum Platform {
+  NOTE
+  X
+  INSTAGRAM
+}
+
+model PlatformAccount {
+  id          String   @id @default(cuid())
+  platform    Platform
+  label       String
+  // AES-256-GCM で暗号化したJSON文字列 (APIキー/トークン/Cookieなど)
+  credentials String
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  posts       Post[]
+}
+
+enum PostStatus {
+  DRAFT
+  SCHEDULED
+  PUBLISHING
+  PUBLISHED
+  FAILED
+}
+
+model Post {
+  id           String          @id @default(cuid())
+  platform     Platform
+  accountId    String
+  account      PlatformAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  title        String?
+  content      String
+  mediaUrl     String?
+  status       PostStatus      @default(DRAFT)
+  scheduledAt  DateTime?
+  publishedAt  DateTime?
+  externalUrl  String?
+  externalId   String?
+  aiTopic      String?
+  errorMessage String?
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  logs         PostLog[]
+
+  @@index([status, scheduledAt])
+}
+
+model PostLog {
+  id        String     @id @default(cuid())
+  postId    String
+  post      Post       @relation(fields: [postId], references: [id], onDelete: Cascade)
+  status    PostStatus
+  message   String?
+  createdAt DateTime   @default(now())
+}

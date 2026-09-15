@@ -1,0 +1,18 @@
+name: Scheduled publish
+
+on:
+  schedule:
+    # 15分ごとに予約投稿の実行をトリガーします(UTC基準)
+    - cron: "*/15 * * * *"
+  workflow_dispatch: {}
+
+jobs:
+  trigger-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call /api/cron/publish
+        run: |
+          curl --fail --silent --show-error \
+            -X POST \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            "${{ secrets.APP_BASE_URL }}/api/cron/publish"
