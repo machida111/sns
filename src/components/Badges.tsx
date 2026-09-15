@@ -1,13 +1,11 @@
 const PLATFORM_LABEL: Record<string, string> = {
   NOTE: "note",
   X: "X",
-  INSTAGRAM: "Instagram",
 };
 
 const PLATFORM_COLOR: Record<string, string> = {
   NOTE: "bg-emerald-100 text-emerald-700",
   X: "bg-gray-900 text-white",
-  INSTAGRAM: "bg-pink-100 text-pink-700",
 };
 
 export function PlatformBadge({ platform }: { platform: string }) {

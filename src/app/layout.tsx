@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "SNS & note 運用自動化",
-  description: "note / X / Instagram の投稿をAI下書き生成とスケジュール投稿で自動化する管理アプリ",
+  description: "note / X の投稿をAI下書き生成とスケジュール投稿で自動化する管理アプリ",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-type Platform = "NOTE" | "X" | "INSTAGRAM";
+type Platform = "NOTE" | "X";
 
 interface Account {
   id: string;
@@ -19,14 +19,10 @@ const FIELD_DEFS: Record<Platform, { key: string; label: string; secret?: boolea
     { key: "accessToken", label: "Access Token" },
     { key: "accessSecret", label: "Access Token Secret", secret: true },
   ],
-  INSTAGRAM: [
-    { key: "igUserId", label: "Instagram Business Account ID" },
-    { key: "accessToken", label: "長期アクセストークン", secret: true },
-  ],
   NOTE: [{ key: "cookie", label: "note.com ログインCookie", secret: true }],
 };
 
-const PLATFORM_LABEL: Record<Platform, string> = { NOTE: "note", X: "X (Twitter)", INSTAGRAM: "Instagram" };
+const PLATFORM_LABEL: Record<Platform, string> = { NOTE: "note", X: "X (Twitter)" };
 
 export default function AccountsPage() {
   const [accounts, setAccounts] = useState<Account[]>([]);
@@ -77,7 +73,7 @@ export default function AccountsPage() {
     <div>
       <h2 className="mb-1 text-lg font-semibold">連携アカウント設定</h2>
       <p className="mb-6 text-sm text-gray-500">
-        note / X / Instagram への自動投稿に必要な認証情報を登録します。値はサーバー側で暗号化して保存されます。
+        note / X への自動投稿に必要な認証情報を登録します。値はサーバー側で暗号化して保存されます。
       </p>
 
       <div className="mb-8 rounded-xl border border-gray-200 bg-white p-6">

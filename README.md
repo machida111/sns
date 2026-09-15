@@ -1,14 +1,18 @@
 # SNS & note 運用自動化アプリ
 
-note.com / X (Twitter) / Instagram への投稿を、AIによる下書き生成・スケジュール投稿・管理画面からの手動トリガーで
+note.com / X (Twitter) への投稿を、AIによる下書き生成・スケジュール投稿・管理画面からの手動トリガーで
 運用できるWebアプリです。
+
+> Instagramは「ビジネスアカウント化 + Facebookページ連携 + Metaアプリ審査」というハードルの高さから、
+> 現バージョンでは対応を見送っています。将来的に必要であれば `src/lib/platforms/` に同様の構成でアダプタを
+> 追加することで拡張できます。
 
 ## 主な機能
 
-- **AI下書き生成**: テーマを入力すると、プラットフォームに合わせた投稿文(note記事 / Xの短文 / Instagramキャプション)をClaude(Anthropic API)が自動生成します
+- **AI下書き生成**: テーマを入力すると、プラットフォームに合わせた投稿文(note記事 / Xの短文)をClaude(Anthropic API)が自動生成します
 - **スケジュール投稿**: 日時を指定して予約投稿し、Cron経由で自動的に公開します
 - **管理画面からの手動トリガー**: ダッシュボードから下書きの確認・編集・即時投稿・削除が行えます
-- **複数プラットフォーム/複数アカウント対応**: note・X・Instagramそれぞれに複数のアカウントを登録できます
+- **複数プラットフォーム/複数アカウント対応**: note・Xそれぞれに複数のアカウントを登録できます
 
 ## 技術構成
 
@@ -18,7 +22,6 @@ note.com / X (Twitter) / Instagram への投稿を、AIによる下書き生成�
 - 認証情報の保存: AES-256-GCMで暗号化してDBに保存
 - AI: Anthropic Claude API (`@anthropic-ai/sdk`)
 - X投稿: `twitter-api-v2` (OAuth1.0aユーザーコンテキスト)
-- Instagram投稿: Instagram Graph API
 - note投稿: **非公式API(要注意、下記参照)**
 
 ## セットアップ (ローカル開発)
@@ -72,13 +75,6 @@ openssl rand -base64 32
 2. "User authentication settings" で **Read and Write** 権限を有効化
 3. Consumer Keys(API Key/Secret)とAccess Token & Secretを発行し、管理画面に入力
 
-### Instagram
-
-1. Instagramアカウントを「ビジネス/クリエイターアカウント」に切り替え、Facebookページと連携
-2. [Meta for Developers](https://developers.facebook.com/) でアプリを作成し `instagram_content_publish` 権限を含む長期アクセストークンを取得
-3. Instagram Business Account ID とアクセストークンを管理画面に入力
-4. **Instagramはテキストのみの投稿に対応していません。** 投稿には画像URL(`mediaUrl`)が必須です
-
 ### note.com ⚠️重要な注意事項
 
 note.comには外部アプリ向けの**公式投稿APIは存在しません**。本アプリのnote連携は、ログイン後のブラウザから
@@ -104,7 +100,7 @@ src/
       cron/publish/        スケジュール投稿の実行(外部Cronから呼び出し)
   lib/
     ai/generate.ts         AI下書き生成(Anthropic)
-    platforms/             X / Instagram / note の投稿アダプタ
+    platforms/             X / note の投稿アダプタ
     publish.ts             投稿実行・予約投稿バッチ処理
     crypto.ts               認証情報の暗号化/復号
     auth.ts                 セッション管理

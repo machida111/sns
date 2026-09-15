@@ -17,7 +17,6 @@ model User {
 enum Platform {
   NOTE
   X
-  INSTAGRAM
 }
 
 model PlatformAccount {

@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 
-type Platform = "NOTE" | "X" | "INSTAGRAM";
+type Platform = "NOTE" | "X";
 
 interface AccountOption {
   id: string;
@@ -15,7 +15,6 @@ interface AccountOption {
 const PLATFORM_OPTIONS: { value: Platform; label: string }[] = [
   { value: "NOTE", label: "note" },
   { value: "X", label: "X (Twitter)" },
-  { value: "INSTAGRAM", label: "Instagram" },
 ];
 
 export default function NewPostPage() {
@@ -193,11 +192,9 @@ export default function NewPostPage() {
           />
         </div>
 
-        {(platform === "INSTAGRAM" || platform === "X") && (
+        {platform === "X" && (
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">
-              画像URL {platform === "INSTAGRAM" && <span className="text-red-500">(Instagramは必須)</span>}
-            </label>
+            <label className="mb-1 block text-sm font-medium text-gray-700">画像URL(任意)</label>
             <input
               value={mediaUrl}
               onChange={(e) => setMediaUrl(e.target.value)}
